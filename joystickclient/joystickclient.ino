@@ -9,21 +9,16 @@
 #include <SPI.h>
 #include <Ethernet.h>
 
-//byte mac[] = { 0x00, 0xAA, 0xBB, 0xCC, 0xDE, 0x01 };
-
-//byte mac[] = { 0xc4, 0x2c, 0x03, 0x38, 0xbf, 0x1a };
+// my ethernet shield
 byte mac[] = { 0x90, 0xa2, 0xda, 0x0d, 0x2a, 0x3d };
-//IPAddress ip(192,168,1,20);
-//IPAddress ip(172,29,131,90);
-//IPAddress ip(172,20,151,218);
-//IPAddress ip(172,20,151,203);
-//IPAddress ip(128,122,151,79);
 IPAddress ip(128,122,151,149);
 
 // Enter the IP address of the computer on which 
 // you'll run the pong server:
 //IPAddress server(192,168,1,100); 
-IPAddress server(128,122,151,164); 
+IPAddress server(128,122,151,164);
+
+const int testButton = 8;
 
 const int connectButton = 2;  // the pushbutton for connecting/disconnecting
 const int connectionLED = 6;  // this LED indicates whether you're connected
@@ -31,15 +26,11 @@ const int leftLED = 4;        // this LED indicates that you're moving left
 const int rightLED = 5;       // this LED indicates that you're moving right
 const int left = 880;         // threshold for the joystick to go left   
 const int right = 891;        // threshold for the joystick to go right
-//const int left = 300;         // threshold for the joystick to go left   
-//const int right = 900;        // threshold for the joystick to go right
 const int sendInterval = 20;  // minimum time between messages to the server
 const int debounceInterval = 15;  // used to smooth out pushbutton readings
 
 const int up = 891;
 const int down = 880;
-//const int up = 900;
-//const int down = 300;
 
 //EthernetClient client;               // instance of the Client class for connecting
 Client client;
@@ -56,6 +47,8 @@ void setup()
   pinMode(connectionLED, OUTPUT);
   pinMode(leftLED, OUTPUT);
   pinMode(rightLED, OUTPUT);
+  
+  pinMode(testButton, INPUT);
 
   delay(1000);      // give the Ethernet shield time to set up
   Serial.println("Starting");
@@ -67,6 +60,8 @@ void loop()
   long currentTime = millis();
   // check to see if the pushbutton's pressed:
   boolean buttonPushed = buttonRead(connectButton);
+  
+  boolean testButtonPushed = buttonRead(testButton);
 
   // if the button's just pressed:
   if (buttonPushed) {
@@ -101,9 +96,14 @@ void loop()
       digitalWrite(leftLED, LOW); 
     }
     
+    if (testButtonPushed)
+    {
+      client.print("d"); 
+    }
+    
     //up and down
-    int upDownValue = analogRead(A1);
-//    Serial.println(upDownValue);
+    /*int upDownValue = analogRead(A1);
+    //Serial.println(upDownValue);
     if (upDownValue > up)
     {
       client.print("u");
@@ -114,7 +114,7 @@ void loop()
     {
       client.print("d");
        
-    }
+    }*/
     
     
     //save this moment as last time you sent a message:
