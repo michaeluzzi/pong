@@ -32,6 +32,9 @@ const int rightLED = 5;       // this LED indicates that you're moving right
 const int sendInterval = 20;  // minimum time between messages to the server
 const int debounceInterval = 15;  // used to smooth out pushbutton readings
 
+int sensorValue1 = 0;
+int sensorValue2 = 0;
+
 //const int left = 880;         // threshold for the joystick to go left   
 //const int right = 891;        // threshold for the joystick to go right
 //const int up = 891;
@@ -84,13 +87,14 @@ void loop()
     
     //LEFT RIGHT
     int  currentsensor1Value = analogRead(A0);
+    Serial.println(currentsensor1Value);
    
-    if (currentsensor1Value < sensorValue1) {    // moving left
+    if (currentsensor1Value < (sensorValue1 - 5)) {    // moving left
       client.print("l");
       digitalWrite(leftLED, HIGH);
     }
 
-    if (currentsensor1Value > sensorValue1) {    // moving right
+    if (currentsensor1Value > (sensorValue1 + 5)) {    // moving right
       client.print("r");
       digitalWrite(rightLED, HIGH);
     }
@@ -99,19 +103,22 @@ void loop()
     //up and down
     int  currentsensor2Value = analogRead(A1);
 
-    if (currentsensor2Value > up) //moving up
+    if (currentsensor2Value > (sensorValue2 + 5)) //moving up
     {
       client.print("u");
       
        
     }
-    if (currentsensor2Value < down)
+    if (currentsensor2Value < (sensorValue2 - 5))
     {
       client.print("d");
        
     }
-    currentsensor1Value = sensorValue1;
-    currentsensor2Value = sensorValue2;
+    
+    sensorValue1 = currentsensor1Value;
+    sensorValue2 = currentsensor2Value;
+    
+
     //save this moment as last time you sent a message:
     lastTimeSent = currentTime; 
   }
