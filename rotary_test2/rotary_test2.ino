@@ -1,5 +1,7 @@
 //From bildr article: http://bildr.org/2012/08/rotary-encoder-arduino/
 
+//#include <PinChangeInt.h>
+
 //these pins can not be changed 2/3 are special pins
 int encoderPin1 = 2;
 int encoderPin2 = 3;
