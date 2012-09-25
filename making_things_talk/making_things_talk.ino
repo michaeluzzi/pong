@@ -10,38 +10,29 @@
 #include <Ethernet.h>
 
 //byte mac[] = { 0x00, 0xAA, 0xBB, 0xCC, 0xDE, 0x01 };
-
-//byte mac[] = { 0xc4, 0x2c, 0x03, 0x38, 0xbf, 0x1a };
-byte mac[] = { 0x90, 0xa2, 0xda, 0x0d, 0x2a, 0x3d };
 //IPAddress ip(192,168,1,20);
-//IPAddress ip(172,29,131,90);
-//IPAddress ip(172,20,151,218);
-//IPAddress ip(172,20,151,203);
-//IPAddress ip(128,122,151,79);
-IPAddress ip(128,122,151,149);
+
+//byte mac[] = { 0x90, 0xa2, 0xda, 0x0d, 0x2a, 0x3d };
+//IPAddress ip(128,122,151,149);
+
+// mark
+byte mac[] = {0x90, 0xA2, 0xDA, 0x00, 0x8E, 0x06};
+IPAddress ip(128,122,151,192);
 
 // Enter the IP address of the computer on which 
 // you'll run the pong server:
-//IPAddress server(192,168,1,100); 
 IPAddress server(128,122,151,164); 
 
-const int connectButton = 2;  // the pushbutton for connecting/disconnecting
+const int connectButton = 8;  // the pushbutton for connecting/disconnecting
 const int connectionLED = 6;  // this LED indicates whether you're connected
 const int leftLED = 4;        // this LED indicates that you're moving left
 const int rightLED = 5;       // this LED indicates that you're moving right
+const int left = 880;         // threshold for the joystick to go left   
+const int right = 891;        // threshold for the joystick to go right
 const int sendInterval = 20;  // minimum time between messages to the server
 const int debounceInterval = 15;  // used to smooth out pushbutton readings
 
-int sensorValue1 = 0;
-int sensorValue2 = 0;
-
-//const int left = 880;         // threshold for the joystick to go left   
-//const int right = 891;        // threshold for the joystick to go right
-//const int up = 891;
-//const int down = 880;
-
 EthernetClient client;               // instance of the Client class for connecting
-//Client client;
 int lastButtonState = 0;     // previous state of the pushbutton
 long lastTimeSent = 0;       // timestamp of the last server message
 
@@ -83,42 +74,22 @@ void loop()
 
   // if the client's connected, and the send interval has elapased:
   if (client.connected() && (currentTime - lastTimeSent > sendInterval)) {   
-    
-    
-    //LEFT RIGHT
-    int  currentsensor1Value = analogRead(A0);
-    Serial.println(currentsensor1Value);
-   
-    if (currentsensor1Value < (sensorValue1 - 5)) {    // moving left
+    // read the joystick and send messages as appropriate:
+    int sensorValue = analogRead(A0);
+    if (sensorValue < left) {    // moving left
       client.print("l");
       digitalWrite(leftLED, HIGH);
     }
 
-    if (currentsensor1Value > (sensorValue1 + 5)) {    // moving right
+    if (sensorValue > right) {    // moving right
       client.print("r");
       digitalWrite(rightLED, HIGH);
     }
-    
-    
-    //up and down
-    int  currentsensor2Value = analogRead(A1);
-
-    if (currentsensor2Value > (sensorValue2 + 5)) //moving up
-    {
-      client.print("u");
-      
-       
+    // if you're in the middle, turn off the LEDs:
+    if (left < sensorValue && sensorValue < right) {
+      digitalWrite(rightLED, LOW);
+      digitalWrite(leftLED, LOW); 
     }
-    if (currentsensor2Value < (sensorValue2 - 5))
-    {
-      client.print("d");
-       
-    }
-    
-    sensorValue1 = currentsensor1Value;
-    sensorValue2 = currentsensor2Value;
-    
-
     //save this moment as last time you sent a message:
     lastTimeSent = currentTime; 
   }
@@ -173,5 +144,3 @@ boolean buttonRead(int thisButton) {
   lastButtonState = buttonState; 
   return result;
 }
-
-

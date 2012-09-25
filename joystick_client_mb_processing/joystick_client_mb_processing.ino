@@ -40,8 +40,8 @@ int sensorValue2 = 0;
 //const int up = 891;
 //const int down = 880;
 
-//EthernetClient client;               // instance of the Client class for connecting
-Client client;
+EthernetClient client;               // instance of the Client class for connecting
+//Client client;
 int lastButtonState = 0;     // previous state of the pushbutton
 long lastTimeSent = 0;       // timestamp of the last server message
 
@@ -118,7 +118,6 @@ void loop()
       digitalWrite(leftLED, HIGH);
       if (Serial.available() > 0)
       {
-        //Serial.println("here is some stuff");
         Serial.println("l"); 
       }
     }
