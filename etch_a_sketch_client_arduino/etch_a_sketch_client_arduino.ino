@@ -13,17 +13,9 @@
 int8_t clicks=0;
 char id=0;
 
-// identify ethernet shield
 //mike
 //byte mac[] = { 0x90, 0xa2, 0xda, 0x0d, 0x2a, 0x3d };
 //IPAddress ip(128,122,151,149);
-
-//byte mac[] = { 0xc4, 0x2c, 0x03, 0x38, 0xbf, 0x1a };
-//IPAddress ip(128,122,151,79);
-
-//robbie
-//byte mac[] = { 0x90, 0xa2, 0xda, 0x02, 0x00, 0x20 };
-//IPAddress ip(108,171,176,74);
 
 // mark
 byte mac[] = {0x90, 0xA2, 0xDA, 0x00, 0x8E, 0x06};
@@ -35,8 +27,6 @@ IPAddress server(128,122,151,164);
 
 const int connectButton = 9;  // the pushbutton for connecting/disconnecting
 const int connectionLED = 6;  // this LED indicates whether you're connected
-//const int leftLED = 4;        // this LED indicates that you're moving left
-//const int rightLED = 5;       // this LED indicates that you're moving right
 const int sendInterval = 20;  // minimum time between messages to the server
 const int debounceInterval = 15;  // used to smooth out pushbutton readings
 
@@ -52,7 +42,7 @@ void setup()
   Ethernet.begin(mac, ip);
   Serial.begin(9600);
   // establish contact with Processing
-  //establishContact();
+  establishContact();
   
   // initialize rotary encoders
   AdaEncoder::addEncoder('a', a_PINA, a_PINB);
@@ -61,8 +51,6 @@ void setup()
   // initialize digital inputs and outputs:
   pinMode(connectButton, INPUT);
   pinMode(connectionLED, OUTPUT);
-  //pinMode(leftLED, OUTPUT);
-  //pinMode(rightLED, OUTPUT);
   
   delay(1000);      // give the Ethernet shield time to set up
   Serial.println("Starting");
@@ -113,7 +101,6 @@ void loop()
         if (clicks > 0)
         {
           client.print("r");
-          //digitalWrite(rightLED, HIGH);
           if (Serial.available() > 0)
           {
              Serial.println("r");
@@ -122,7 +109,6 @@ void loop()
         if (clicks < 0)
         {
           client.print("l");
-          //digitalWrite(leftLED, HIGH);
           if (Serial.available() > 0)
           {
             Serial.println("l"); 
@@ -156,10 +142,6 @@ void loop()
 
   // set the connection LED based on the connection state:
   digitalWrite(connectionLED, client.connected());
-  
-  // reset direction LEDs
-  //digitalWrite(rightLED, LOW);
-  //digitalWrite(leftLED, LOW);
   
 }// end loop
 
