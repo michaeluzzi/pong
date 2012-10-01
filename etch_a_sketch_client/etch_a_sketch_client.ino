@@ -44,11 +44,8 @@ EthernetClient client;               // instance of the Client class
 int lastButtonState = 0;     // previous state of the pushbutton
 long lastTimeSent = 0;       // timestamp of the last server message
 
-<<<<<<< HEAD
 boolean nameSent = false;
 
-=======
->>>>>>> cd012b2ea1c0cada25fe451e0eb24b71ed7e22db
 void setup()
 {
   // initialize serial and Ethernet ports:
@@ -87,20 +84,12 @@ void loop()
       Serial.println("disconnecting");
       client.print("x");
       client.stop();
-<<<<<<< HEAD
       nameSent = false;
-=======
->>>>>>> cd012b2ea1c0cada25fe451e0eb24b71ed7e22db
     } // if the client's disconnected, try to connect:
     else
     {
       Serial.println("connecting");
       client.connect(server, 8080);
-<<<<<<< HEAD
-=======
-      // establish contact with Processing
-      //establishContact();
->>>>>>> cd012b2ea1c0cada25fe451e0eb24b71ed7e22db
     }
   }
   
@@ -111,14 +100,11 @@ void loop()
   // if the client's connected, and the send interval has elapased:
   if (client.connected() && (currentTime - lastTimeSent > sendInterval))
   { 
-<<<<<<< HEAD
     if (nameSent == false)
     {
       client.print("netch-a-sketch\n");
       nameSent = true;  
     } 
-=======
->>>>>>> cd012b2ea1c0cada25fe451e0eb24b71ed7e22db
     // if an encoder changes value, send appropriate message to the server and/or Processing
     if (thisEncoder != NULL)
     {
