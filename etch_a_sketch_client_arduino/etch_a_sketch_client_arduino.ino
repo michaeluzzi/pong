@@ -21,10 +21,13 @@ char id=0;
 byte mac[] = {0x90, 0xA2, 0xDA, 0x00, 0x8E, 0x06};
 IPAddress ip(128,122,151,192);
 
+
 // Enter the IP address of the computer on which
 // you'll run the pong server:
-IPAddress server(128,122,151,164);
+//IPAddress server(128,122,151,164);
+IPAddress server(72,229,98,156);
 
+ 
 const int connectButton = 9;  // the pushbutton for connecting/disconnecting
 const int connectionLED = 6;  // this LED indicates whether you're connected
 const int sendInterval = 20;  // minimum time between messages to the server
